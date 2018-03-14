@@ -4,6 +4,7 @@ import * as logger from 'morgan'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 
+import { UserClient } from './services/userClient'
 import { IndexController } from './controllers/indexController'
 
 const app = express()
@@ -21,6 +22,13 @@ app.use(express.static(path.join(__dirname, '../public')))
 // Attach routes
 const router = express.Router()
 app.use('/', router)
+
+// TODO inject UserClient
+const userClient = new UserClient(process.env.API_URL || 'http://localhost:3001/api')
+router.use(function (req, res, next) {
+  req['userClient'] = userClient
+  next()
+})
 
 const indexController = new IndexController
 indexController.attachRoutes(router)

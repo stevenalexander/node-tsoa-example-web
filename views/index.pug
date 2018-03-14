@@ -2,3 +2,17 @@ extends layout
 
 block content
   h2 Users
+  table.table.table-striped
+    thead
+      tr
+        th Id
+        th Name
+        th Email
+    tbody
+      each user in users
+        tr
+          td= user.id
+          td= user.name
+          td= user.email
+
+
