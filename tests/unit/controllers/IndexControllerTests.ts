@@ -2,6 +2,8 @@ import 'mocha'
 import * as supertest from 'supertest'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
+import { TYPES } from '../../../src/types'
+import { iocContainer } from '../../../src/ioc'
 import { User, UserCreationRequest } from 'tsoa-example-models'
 import { MockViewEngine } from '../mockViewEngine'
 import { UserClientInterface } from '../../../src/services/userClient'
@@ -22,6 +24,7 @@ class MockUserClient implements UserClientInterface {
 
 describe('IndexController', function () {
   let request
+  let indexController
 
   beforeEach(function () {
     const app = express()
@@ -32,14 +35,14 @@ describe('IndexController', function () {
     const router = express.Router()
     app.use('/', router)
 
-    // TODO inject UserClient
     const mockUserClient = new MockUserClient
     router.use(function (req, res, next) {
       req['userClient'] = mockUserClient
       next()
     })
+    iocContainer.rebind(TYPES.UserClientInterface).toConstantValue(mockUserClient)
 
-    const indexController = new IndexController
+    indexController = iocContainer.get<IndexController>(TYPES.IndexController)
     indexController.attachRoutes(router)
 
     request = supertest(app)

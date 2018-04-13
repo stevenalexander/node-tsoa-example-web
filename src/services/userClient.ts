@@ -1,4 +1,6 @@
+import { injectable, inject } from 'inversify'
 import axios from 'axios'
+import { TYPES } from '../types'
 import { User, UserCreationRequest } from 'tsoa-example-models'
 
 export interface UserClientInterface {
@@ -7,10 +9,11 @@ export interface UserClientInterface {
   create(userCreationRequest: UserCreationRequest): Promise<void>
 }
 
+@injectable()
 export class UserClient implements UserClientInterface {
   url: string
-  constructor(url: string) {
-      this.url = url
+  constructor(@inject(TYPES.UserClientUrl) userClientUrl: string) {
+    this.url = userClientUrl
   }
 
   public async getAll(): Promise<User[]> {
