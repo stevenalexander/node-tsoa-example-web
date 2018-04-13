@@ -32,8 +32,8 @@ export class UserClient implements UserClientInterface {
 
   public async create(userCreationRequest: UserCreationRequest): Promise<void> {
     return axios.post(`${this.url}/Users`, userCreationRequest)
-    .then((response) => {
-      return null
-    })
+      .then((response) => {
+        return null
+      })
   }
 }

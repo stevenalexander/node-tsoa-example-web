@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h2 User
+
+  table.table.table-striped
+    tbody
+      tr
+        th Id
+        td= user.id
+      tr
+        th Name
+        td= user.name
+      tr
+        th Email
+        td= user.email

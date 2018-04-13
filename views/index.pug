@@ -11,8 +11,18 @@ block content
     tbody
       each user in users
         tr
-          td= user.id
+          td
+            a(href=`/${user.id}`)= user.id
           td= user.name
           td= user.email
 
-
+  h3 Add user
+  form(action='/', method='post')
+    div.form-group
+      label.sr-only(for='name') Name
+      input.form-control(type='text', name='name', id='name', placeholder='Name')
+    div.form-group
+      label.sr-only(for='email') Email
+      input.form-control(type='email', name='email', id='email', placeholder='Email')
+    div.form-group
+      button.btn.btn-default(type='submit') Add

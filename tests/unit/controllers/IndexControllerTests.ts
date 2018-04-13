@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as supertest from 'supertest'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
-import { mock, instance, when, verify } from 'ts-mockito'
+import { mock, instance, when, verify, anything, capture } from 'ts-mockito'
 import { TYPES } from '../../../src/types'
 import { iocContainer } from '../../../src/ioc'
 import { User } from 'tsoa-example-models'
@@ -51,6 +51,38 @@ describe('IndexController', function () {
         .then(res => {
           expect(res.text).to.contain(user1.name)
           verify(mockUserClient.getAll()).once()
+        })
+    })
+  })
+
+  describe('GET /1234', function () {
+    it('should return user response', () => {
+      when(mockUserClient.get(1234)).thenResolve(user1)
+
+      return request
+        .get('/1234')
+        .expect(200)
+        .then(res => {
+          expect(res.text).to.contain(user1.name)
+          verify(mockUserClient.get(1234)).once()
+        })
+    })
+  })
+
+  describe('POST /', function () {
+    it('should return redirect', () => {
+      when(mockUserClient.create(anything())).thenResolve()
+
+      return request
+        .post('/')
+        .send({name: 'user2', email: 'user2@test.com', phoneNumbers: '12345,54321'})
+        .type('form')
+        .expect(302)
+        .then(() => {
+          verify(mockUserClient.create(anything())).once()
+          const [userCreationRequest] = capture(mockUserClient.create).last()
+          expect(userCreationRequest.name).to.equal('user2')
+          expect(userCreationRequest.email).to.equal('user2@test.com')
         })
     })
   })
