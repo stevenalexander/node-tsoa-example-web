@@ -14,3 +14,15 @@ block content
       tr
         th Email
         td= user.email
+      tr
+        th Status
+        td
+          form(action=`/${user.id}/ChangeOfStatus`, method='post')
+            div.form-group
+              label.sr-only(for='status') Status
+              select.form-control(name='status', id='status')
+                option(value='')
+                option(value='ACTIVE', selected=(user.status == 'ACTIVE')) Active
+                option(value='DISABLED', selected=(user.status == 'DISABLED')) Disabled
+            div.form-group
+              button.btn.btn-default(type='submit') Update

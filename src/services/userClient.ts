@@ -1,12 +1,13 @@
 import { injectable, inject } from 'inversify'
 import axios from 'axios'
 import { TYPES } from '../types'
-import { User, UserCreationRequest } from 'tsoa-example-models'
+import { User, UserCreationRequest, UserChangeOfStatusRequest } from 'tsoa-example-models'
 
 export interface UserClientInterface {
   getAll(): Promise<User[]>
   get(id: number): Promise<User>
   create(userCreationRequest: UserCreationRequest): Promise<void>
+  changeOfStatus(userChangeOfStatusRequest: UserChangeOfStatusRequest): Promise<void>
 }
 
 @injectable()
@@ -32,6 +33,13 @@ export class UserClient implements UserClientInterface {
 
   public async create(userCreationRequest: UserCreationRequest): Promise<void> {
     return axios.post(`${this.url}/Users`, userCreationRequest)
+      .then((response) => {
+        return null
+      })
+  }
+
+  public async changeOfStatus(userChangeOfStatusRequest: UserChangeOfStatusRequest): Promise<void> {
+    return axios.post(`${this.url}/Users/${userChangeOfStatusRequest.id}/ChangeOfStatus`, userChangeOfStatusRequest)
       .then((response) => {
         return null
       })

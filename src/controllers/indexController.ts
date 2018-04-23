@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { injectable, inject } from 'inversify'
 import { TYPES } from '../types'
-import { UserCreationRequest } from 'tsoa-example-models'
+import { UserCreationRequest, UserChangeOfStatusRequest } from 'tsoa-example-models'
 import { UserClientInterface } from '../services/userClient'
 
 @injectable()
@@ -45,9 +45,24 @@ export class IndexController {
     }
   }
 
+  public async postChangeOfStatus(req, res, next) {
+    try {
+    let userChangeOfStatusRequest: UserChangeOfStatusRequest = {
+      id: +req.params.id,
+      status: req.body.status
+    }
+
+      await this.userClient.changeOfStatus(userChangeOfStatusRequest)
+      res.redirect('/')
+    } catch (error) {
+      next(error)
+    }
+  }
+
   public attachRoutes(router: Router) {
     router.get('/', this.getAll.bind(this)) // needed so instance of controller can access `this.userClient`
     router.get('/:id', this.get.bind(this))
     router.post('/', this.post.bind(this))
+    router.post('/:id/ChangeOfStatus', this.postChangeOfStatus.bind(this))
   }
 }

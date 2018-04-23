@@ -30,7 +30,7 @@
     "pug": "2.0.0-beta11",
     "reflect-metadata": "^0.1.12",
     "serve-favicon": "~2.4.5",
-    "tsoa-example-models": "git+https://github.com/stevenalexander/node-tsoa-example-models.git#v0.1"
+    "tsoa-example-models": "git+https://github.com/stevenalexander/node-tsoa-example-models.git#v0.3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",

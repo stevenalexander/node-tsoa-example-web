@@ -86,4 +86,21 @@ describe('IndexController', function () {
         })
     })
   })
+
+  describe('POST /1234/ChangeOfStatus', function () {
+    it('should return redirect', () => {
+      when(mockUserClient.changeOfStatus(anything())).thenResolve()
+
+      return request
+        .post('/1234/ChangeOfStatus')
+        .send({status: 'ACTIVE'})
+        .type('form')
+        .expect(302)
+        .then(() => {
+          verify(mockUserClient.changeOfStatus(anything())).once()
+          const [userChangeOfStatusRequest] = capture(mockUserClient.changeOfStatus).last()
+          expect(userChangeOfStatusRequest.status).to.equal('ACTIVE')
+        })
+    })
+  })
 })
